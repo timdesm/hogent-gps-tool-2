@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace HoGent_GPS_Project___Tool_2
@@ -23,6 +24,28 @@ namespace HoGent_GPS_Project___Tool_2
         public static MySqlCommand CommandExecutor(MySqlConnection cc, String sql)
         {
             return new MySqlCommand(sql, cc);
+        }
+
+        public int checkConnection()
+        {
+            int errorCode = 1;
+            MySqlConnection con = null;
+            try
+            {
+                con = new MySqlConnection(this.cs);
+                con.Open();
+            }
+            catch (ArgumentException e) { }
+            catch (MySqlException e)
+            {
+                errorCode = e.Number;
+            }
+            finally
+            {
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+            }
+            return errorCode;
         }
     }
 }
