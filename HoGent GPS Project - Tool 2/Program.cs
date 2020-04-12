@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace HoGent_GPS_Project___Tool_2
 {
@@ -10,23 +11,20 @@ namespace HoGent_GPS_Project___Tool_2
 
         public static String appData;
 
+        public static DatabaseUtil db;
+        public static String mysql_host = "timdesmet.be";
+        public static String mysql_user = "u32002p26917_hogent";
+        public static String mysql_pass = "riZAQeIZ";
+        public static String mysql_data = "u32002p26917_hogent";
+
         static void Main(string[] args)
         {
             var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             appData = Path.Combine(appDataPath, @"TimDeSmet-HoGent\GPS-Project\Tool-2");
 
-            printHeader();
-            Console.Write("Rapport file path?: ");
-            String rapportFile = Console.ReadLine();
+            db = new DatabaseUtil(mysql_host, mysql_user, mysql_pass, mysql_data);
 
-            printHeader();
-            Console.WriteLine("Loading rapport...");
-            Console.WriteLine(" ");
-
-            rapport = RapportManager.importRapport(rapportFile);
-
-
-            while(data == null)
+            while (data == null)
             {
                 printHeader();
                 Console.Write("Data file path?: ");
@@ -38,7 +36,7 @@ namespace HoGent_GPS_Project___Tool_2
 
                 data = DataManager.importData(dataFile);
 
-                if(data == null)
+                if (data == null)
                 {
                     printHeader();
                     Console.WriteLine("File was not a valid Data file");
@@ -48,16 +46,60 @@ namespace HoGent_GPS_Project___Tool_2
                 }
             }
 
-            printHeader();
-            Console.WriteLine("All data has been loaded");
-            Console.WriteLine(" ");
-
+            Thread.Sleep(25);
             while (true)
             {
-                Console.WriteLine("Rapport streets: " + rapport.Count.Streets);
-                Console.WriteLine("Data states: " + data.States.Count);
-                Console.ReadLine();
+                printHeader();
+                Console.WriteLine("All data has been loaded");
+                Console.WriteLine(" ");
+
+                Console.WriteLine("----- [MENU] -----");
+                Console.WriteLine("[1] UPLOAD TO DATABASE");
+                Console.WriteLine("[2] DATABASE STATUS");
+                Console.Write("Selection: ");
+                String selection = Console.ReadLine();
+
+                switch (selection)
+                {
+                    case "1":
+                        MenuManager.case1();
+                        break;
+                    case "2":
+                        MenuManager.case2();
+                        break;
+                    default:
+                        Console.Write("Wrong selection input, press ENTER to continue...");
+                        Console.ReadLine();
+                        break;
+                }
             }
+        }
+
+        public static void drawTextProgressBar(string stepDescription, int progress, int total, int curstorTop)
+        {
+            int totalChunks = 50;
+
+            Console.CursorLeft = 0;
+            Console.CursorTop = curstorTop;
+            Console.Write("[");
+            Console.CursorLeft = totalChunks + 1;
+            Console.Write("]");
+            Console.CursorLeft = 1;
+
+            double pctComplete = Convert.ToDouble((int)progress) / total;
+            int numChunksComplete = Convert.ToInt16(totalChunks * pctComplete);
+
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.Write("".PadRight(numChunksComplete));
+
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.Write("".PadRight(totalChunks - numChunksComplete));
+
+            Console.CursorLeft = totalChunks + 5;
+            Console.BackgroundColor = ConsoleColor.Black;
+
+            string output = progress + " of " + total + " (" + string.Format("{0:F1}", pctComplete * 100) + "%)";
+            Console.Write(output.PadRight(35) + stepDescription);
         }
 
         public static void printHeader()
