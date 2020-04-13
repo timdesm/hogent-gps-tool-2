@@ -111,7 +111,7 @@ namespace HoGent_GPS_Project___Tool_2
                 {
                     String map = "{}";
                     if (street.Graaf != null)
-                        map = JsonConvert.SerializeObject(street.Graaf.Map);
+                        map = JsonConvert.SerializeObject(street.Graaf);
                     addStreet(street.ID, street.Name, street.Length, city.ID, map);
                 }
 

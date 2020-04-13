@@ -14,7 +14,7 @@ namespace HoGent_GPS_Project___Tool_2
         public static DatabaseUtil db;
         public static String mysql_host = "timdesmet.be";
         public static String mysql_user = "u32002p26917_hogent";
-        public static String mysql_pass;
+        public static String mysql_pass; // riZAQeIZ
         public static String mysql_data = "u32002p26917_hogent";
 
         static void Main(string[] args)
