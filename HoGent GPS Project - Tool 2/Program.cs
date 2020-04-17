@@ -14,7 +14,7 @@ namespace HoGent_GPS_Project___Tool_2
         public static DatabaseUtil db;
         public static String mysql_host = "timdesmet.be";
         public static String mysql_user = "u32002p26917_hogent";
-        public static String mysql_pass; // riZAQeIZ
+        public static String mysql_pass;
         public static String mysql_data = "u32002p26917_hogent";
 
         static void Main(string[] args)
@@ -76,7 +76,8 @@ namespace HoGent_GPS_Project___Tool_2
             }
 
             Thread.Sleep(25);
-            while (true)
+            Boolean runApp = true;
+            while (runApp)
             {
                 printHeader();
                 Console.WriteLine("All data has been loaded");
@@ -85,6 +86,7 @@ namespace HoGent_GPS_Project___Tool_2
                 Console.WriteLine("----- [MENU] -----");
                 Console.WriteLine("[1] UPLOAD TO DATABASE");
                 Console.WriteLine("[2] DATABASE STATUS");
+                Console.WriteLine("[3] CLOSE APPLICATION");
                 Console.Write("Selection: ");
                 String selection = Console.ReadLine();
 
@@ -95,6 +97,9 @@ namespace HoGent_GPS_Project___Tool_2
                         break;
                     case "2":
                         MenuManager.case2();
+                        break;
+                    case "3":
+                        runApp = false;
                         break;
                     default:
                         Console.Write("Wrong selection input, press ENTER to continue...");
